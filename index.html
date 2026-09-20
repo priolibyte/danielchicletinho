@@ -1,2447 +1,690 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Chicletinho — Rifa</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --pink: #ff3b81;
-    --pink-dark: #e91e63;
-    --purple: #752cff;
-    --dark: #171525;
-    --gray: #777487;
-    --light: #f8f7fc;
-    --white: #ffffff;
-    --green: #16a765;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: "Poppins", sans-serif;
-    background: var(--light);
-    color: var(--dark);
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
-.header {
-    height: 75px;
-    background: #fff;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 7%;
-
-    border-bottom: 1px solid #eee;
-
-    position: relative;
-    z-index: 20;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    font-size: 23px;
-    font-weight: 800;
-
-    color: var(--pink);
-}
-
-.logo-icon {
-    font-size: 30px;
-}
-
-.header-status {
-    font-size: 12px;
-    color: #666;
-
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-
-/* =========================
-   HERO
-========================= */
-
-.hero {
-    min-height: 500px;
-
-    position: relative;
-    overflow: hidden;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ff3b81 0%,
-            #c52cff 55%,
-            #752cff 100%
-        );
-
-    color: white;
-
-    display: flex;
-    align-items: center;
-
-    padding: 70px 10%;
-}
-
-.hero-content {
-    max-width: 650px;
-
-    position: relative;
-    z-index: 3;
-
-    animation: fadeUp .8s ease;
-}
-
-.badge {
-    display: inline-block;
-
-    padding: 8px 16px;
-
-    border-radius: 30px;
-
-    background: rgba(255,255,255,.17);
-
-    border: 1px solid rgba(255,255,255,.2);
-
-    font-size: 11px;
-    font-weight: 700;
-
-    margin-bottom: 20px;
-}
-
-.hero h1 {
-    font-size: clamp(40px, 6vw, 68px);
-
-    line-height: 1.04;
-
-    margin-bottom: 20px;
-
-    letter-spacing: -2px;
-}
-
-.hero h1 span {
-    display: block;
-
-    color: #ffe66d;
-}
-
-.hero p {
-    max-width: 540px;
-
-    color: rgba(255,255,255,.92);
-
-    line-height: 1.7;
-
-    font-size: 15px;
-
-    margin-bottom: 30px;
-}
-
-.prize-card {
-    width: fit-content;
-
-    display: flex;
-    align-items: center;
-
-    gap: 15px;
-
-    padding: 15px 22px;
-
-    background: rgba(255,255,255,.14);
-
-    border: 1px solid rgba(255,255,255,.2);
-
-    border-radius: 18px;
-
-    backdrop-filter: blur(10px);
-}
-
-.prize-icon {
-    font-size: 38px;
-}
-
-.prize-card small {
-    display: block;
-
-    opacity: .7;
-
-    font-size: 10px;
-}
-
-.prize-card strong {
-    font-size: 17px;
-}
-
-
-/* DECORAÇÃO */
-
-.bubble {
-    position: absolute;
-
-    border-radius: 50%;
-
-    background: rgba(255,255,255,.08);
-
-    animation: float 5s infinite ease-in-out;
-}
-
-.bubble1 {
-    width: 400px;
-    height: 400px;
-
-    right: 2%;
-    top: -160px;
-}
-
-.bubble2 {
-    width: 220px;
-    height: 220px;
-
-    right: 30%;
-    bottom: -120px;
-
-    animation-delay: 1s;
-}
-
-.bubble3 {
-    width: 120px;
-    height: 120px;
-
-    right: 8%;
-    bottom: 35px;
-
-    animation-delay: 2s;
-}
-
-
-/* =========================
-   COMPRA
-========================= */
-
-.purchase-section {
-    padding: 70px 20px;
-}
-
-.purchase-card {
-    max-width: 780px;
-
-    margin: -120px auto 0;
-
-    position: relative;
-
-    z-index: 10;
-
-    background: white;
-
-    border-radius: 28px;
-
-    padding: 40px;
-
-    box-shadow:
-        0 25px 70px rgba(30,20,60,.13);
-
-    animation: cardUp .8s ease;
-}
-
-.card-header {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 30px;
-
-    padding-bottom: 25px;
-
-    border-bottom: 1px solid #eee;
-}
-
-.card-header small {
-    color: var(--pink);
-
-    font-size: 10px;
-
-    font-weight: 800;
-}
-
-.card-header h2 {
-    font-size: 27px;
-}
-
-.price {
-    text-align: right;
-}
-
-.price strong {
-    display: block;
-
-    color: var(--pink);
-
-    font-size: 22px;
-}
-
-.price span {
-    color: var(--gray);
-
-    font-size: 11px;
-}
-
-
-/* =========================
-   FORMULÁRIO
-========================= */
-
-.input-group {
-    margin-bottom: 20px;
-}
-
-.input-group label {
-    display: block;
-
-    font-size: 13px;
-
-    font-weight: 600;
-
-    margin-bottom: 8px;
-}
-
-.input-group input {
-    width: 100%;
-
-    height: 52px;
-
-    padding: 0 17px;
-
-    border: 1px solid #e2e0e9;
-
-    border-radius: 12px;
-
-    font-family: inherit;
-
-    font-size: 14px;
-
-    outline: none;
-
-    transition: .25s;
-}
-
-.input-group input:focus {
-    border-color: var(--pink);
-
-    box-shadow:
-        0 0 0 4px rgba(255,59,129,.09);
-}
-
-.input-row {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 15px;
-}
-
-
-/* =========================
-   QUANTIDADE
-========================= */
-
-.quantity-box {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    padding: 20px;
-
-    background: #faf9fd;
-
-    border-radius: 16px;
-
-    margin-top: 10px;
-}
-
-.quantity-box label {
-    display: block;
-
-    font-size: 14px;
-
-    font-weight: 700;
-}
-
-.quantity-box span {
-    color: var(--gray);
-
-    font-size: 11px;
-}
-
-.quantity-control {
-    display: flex;
-
-    align-items: center;
-
-    gap: 7px;
-}
-
-.quantity-control button {
-    width: 40px;
-    height: 40px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background: var(--pink);
-
-    color: white;
-
-    font-size: 22px;
-
-    cursor: pointer;
-
-    transition: .2s;
-}
-
-.quantity-control button:hover {
-    transform: scale(1.08);
-}
-
-.quantity-control input {
-    width: 50px;
-
-    border: none;
-
-    background: transparent;
-
-    text-align: center;
-
-    font-size: 17px;
-
-    font-weight: 700;
-
-    outline: none;
-}
-
-
-/* =========================
-   TOTAL
-========================= */
-
-.total-box {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding: 25px 5px;
-}
-
-.total-box span {
-    font-size: 15px;
-}
-
-.total-box strong {
-    color: var(--pink);
-
-    font-size: 28px;
-}
-
-
-/* =========================
-   BOTÃO
-========================= */
-
-.buy-button {
-    width: 100%;
-
-    border: none;
-
-    padding: 17px 25px;
-
-    border-radius: 14px;
-
-    background:
-        linear-gradient(
-            90deg,
-            var(--pink),
-            var(--purple)
-        );
-
-    color: white;
-
-    font-family: inherit;
-
-    font-size: 15px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    transition: .3s;
-}
-
-.buy-button:hover {
-    transform: translateY(-3px);
-
-    box-shadow:
-        0 12px 30px rgba(117,44,255,.25);
-}
-
-.security {
-    text-align: center;
-
-    color: #999;
-
-    font-size: 10px;
-
-    margin-top: 15px;
-}
-
-
-/* =========================
-   COMO FUNCIONA
-========================= */
-
-.how-section {
-    background: white;
-
-    padding: 80px 8%;
-}
-
-.section-title {
-    text-align: center;
-
-    margin-bottom: 50px;
-}
-
-.section-title span {
-    color: var(--pink);
-
-    font-size: 12px;
-
-    font-weight: 700;
-}
-
-.section-title h2 {
-    font-size: 35px;
-}
-
-.steps {
-    max-width: 1000px;
-
-    margin: auto;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 30px;
-}
-
-.step {
-    text-align: center;
-
-    padding: 30px 20px;
-
-    position: relative;
-}
-
-.step-number {
-    position: absolute;
-
-    top: 5px;
-
-    right: 15px;
-
-    font-size: 45px;
-
-    font-weight: 800;
-
-    color: #f1eff7;
-}
-
-.step-icon {
-    width: 70px;
-    height: 70px;
-
-    margin: auto auto 20px;
-
-    border-radius: 20px;
-
-    background: #fff0f6;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 30px;
-
-    position: relative;
-}
-
-.step h3 {
-    font-size: 17px;
-
-    margin-bottom: 10px;
-}
-
-.step p {
-    color: var(--gray);
-
-    font-size: 13px;
-
-    line-height: 1.6;
-}
-
-
-/* =========================
-   MODAL
-========================= */
-
-.modal {
-    display: none;
-
-    position: fixed;
-
-    inset: 0;
-
-    background: rgba(15,10,30,.76);
-
-    backdrop-filter: blur(7px);
-
-    z-index: 1000;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-}
-
-.modal.active {
-    display: flex;
-
-    animation: fade .3s ease;
-}
-
-.modal-content {
-    width: 100%;
-
-    max-width: 450px;
-
-    background: white;
-
-    border-radius: 25px;
-
-    padding: 35px;
-
-    text-align: center;
-
-    position: relative;
-
-    animation: modalUp .4s ease;
-}
-
-.close {
-    position: absolute;
-
-    right: 18px;
-    top: 12px;
-
-    border: none;
-
-    background: transparent;
-
-    font-size: 30px;
-
-    color: #888;
-
-    cursor: pointer;
-}
-
-.modal-icon {
-    font-size: 45px;
-
-    margin-bottom: 5px;
-}
-
-.modal-content h2 {
-    font-size: 25px;
-}
-
-.modal-content > p {
-    color: var(--gray);
-
-    font-size: 13px;
-
-    margin: 5px 0 20px;
-}
-
-
-/* =========================
-   QR CODE
-========================= */
-
-.qr-container {
-    width: 200px;
-    height: 200px;
-
-    margin: 20px auto;
-
-    padding: 10px;
-
-    background: white;
-
-    border: 1px solid #eee;
-
-    border-radius: 15px;
-}
-
-.qrcode {
-    width: 178px;
-    height: 178px;
-
-    position: relative;
-
-    overflow: hidden;
-
-    background:
-        repeating-linear-gradient(
-            0deg,
-            #111 0px,
-            #111 3px,
-            #fff 3px,
-            #fff 6px
-        ),
-        repeating-linear-gradient(
-            90deg,
-            transparent 0px,
-            transparent 3px,
-            rgba(0,0,0,.9) 3px,
-            rgba(0,0,0,.9) 6px
-        );
-}
-
-.qrcode::before,
-.qrcode::after {
-    content: "";
-
-    position: absolute;
-
-    width: 40px;
-    height: 40px;
-
-    background: white;
-
-    border: 8px solid #111;
-}
-
-.qrcode::before {
-    top: 10px;
-    left: 10px;
-}
-
-.qrcode::after {
-    top: 10px;
-    right: 10px;
-}
-
-.qrcode span {
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    transform: translate(-50%, -50%);
-
-    z-index: 5;
-
-    background: white;
-
-    padding: 7px 10px;
-
-    font-weight: 800;
-
-    font-size: 11px;
-}
-
-
-/* =========================
-   PAGAMENTO
-========================= */
-
-.payment-value {
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    padding: 15px;
-
-    background: #faf9fd;
-
-    border-radius: 12px;
-
-    margin: 15px 0;
-}
-
-.payment-value span {
-    color: var(--gray);
-
-    font-size: 13px;
-}
-
-.payment-value strong {
-    color: var(--pink);
-
-    font-size: 18px;
-}
-
-.pix-code {
-    display: flex;
-
-    gap: 5px;
-}
-
-.pix-code input {
-    flex: 1;
-
-    min-width: 0;
-
-    height: 42px;
-
-    border: 1px solid #ddd;
-
-    border-radius: 9px;
-
-    padding: 0 10px;
-
-    font-size: 10px;
-}
-
-.pix-code button {
-    border: none;
-
-    background: var(--pink);
-
-    color: white;
-
-    border-radius: 9px;
-
-    padding: 0 15px;
-
-    cursor: pointer;
-
-    font-family: inherit;
-
-    font-weight: 600;
-}
-
-.waiting {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 10px;
-
-    margin: 20px 0;
-
-    color: var(--gray);
-
-    font-size: 11px;
-}
-
-.loader {
-    width: 16px;
-    height: 16px;
-
-    border: 2px solid #ddd;
-
-    border-top-color: var(--pink);
-
-    border-radius: 50%;
-
-    animation: spin .8s linear infinite;
-}
-
-.payment-info {
-    font-size: 10px !important;
-
-    line-height: 1.5;
-
-    color: #999 !important;
-}
-
-
-/* =========================
-   SUCESSO
-========================= */
-
-.success-icon {
-    width: 75px;
-    height: 75px;
-
-    margin: 0 auto 20px;
-
-    border-radius: 50%;
-
-    background: #e9fff3;
-
-    color: var(--green);
-
-    font-size: 40px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-}
-
-.numbers-box {
-    background: #faf9fd;
-
-    border-radius: 15px;
-
-    padding: 20px;
-
-    margin: 25px 0;
-}
-
-.numbers-box span {
-    color: var(--gray);
-
-    font-size: 11px;
-}
-
-.numbers-box div {
-    margin-top: 8px;
-
-    color: var(--pink);
-
-    font-size: 23px;
-
-    font-weight: 800;
-
-    letter-spacing: 3px;
-
-    word-break: break-word;
-}
-
-.success-info {
-    color: var(--gray);
-
-    font-size: 12px;
-
-    line-height: 1.6;
-
-    margin-bottom: 20px;
-}
-
-
-/* =========================
-   FOOTER
-========================= */
-
-footer {
-    background: var(--dark);
-
-    color: white;
-
-    text-align: center;
-
-    padding: 40px 20px;
-}
-
-.footer-logo {
-    color: var(--pink);
-
-    font-size: 22px;
-
-    font-weight: 800;
-
-    margin-bottom: 10px;
-}
-
-footer p {
-    color: #999;
-
-    font-size: 11px;
-
-    margin-bottom: 5px;
-}
-
-footer small {
-    color: #666;
-
-    font-size: 10px;
-}
-
-
-/* =========================
-   ANIMAÇÕES
-========================= */
-
-@keyframes fadeUp {
-
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-}
-
-@keyframes cardUp {
-
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-}
-
-@keyframes modalUp {
-
-    from {
-        opacity: 0;
-        transform: translateY(40px) scale(.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-
-}
-
-@keyframes fade {
-
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-
-}
-
-@keyframes float {
-
-    0%,100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
-
-}
-
-@keyframes spin {
-
-    to {
-        transform: rotate(360deg);
-    }
-
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:700px) {
-
-    .header {
-        padding: 0 20px;
-    }
-
-    .header-status {
-        font-size: 10px;
-    }
-
-    .hero {
-        padding: 55px 25px 155px;
-    }
-
-    .hero h1 {
-        font-size: 43px;
-
-        letter-spacing: -1.5px;
-    }
-
-    .hero p {
-        font-size: 14px;
-    }
-
-    .purchase-section {
-        padding: 50px 15px;
-    }
-
-    .purchase-card {
-        padding: 25px 20px;
-
-        margin-top: -100px;
-    }
-
-    .card-header {
-        align-items: flex-start;
-    }
-
-    .card-header h2 {
-        font-size: 21px;
-    }
-
-    .price strong {
-        font-size: 17px;
-    }
-
-    .input-row {
-        grid-template-columns: 1fr;
-
-        gap: 0;
-    }
-
-    .quantity-box {
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 15px;
-    }
-
-    .quantity-control {
-        width: 100%;
-
-        justify-content: space-between;
-    }
-
-    .steps {
-        grid-template-columns: 1fr;
-    }
-
-    .section-title h2 {
-        font-size: 29px;
-    }
-
-    .modal-content {
-        padding: 30px 20px;
-    }
-
-    .qr-container {
-        width: 180px;
-        height: 180px;
-    }
-
-    .qrcode {
-        width: 158px;
-        height: 158px;
-    }
-
-}
-
-
-/* =========================
-   TOAST
-========================= */
-
-.toast {
-    position: fixed;
-
-    bottom: 25px;
-    left: 50%;
-
-    transform: translateX(-50%) translateY(100px);
-
-    background: #171525;
-
-    color: white;
-
-    padding: 13px 20px;
-
-    border-radius: 30px;
-
-    font-size: 12px;
-
-    opacity: 0;
-
-    transition: .3s;
-
-    z-index: 2000;
-}
-
-.toast.show {
-    opacity: 1;
-
-    transform:
-        translateX(-50%)
-        translateY(0);
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicletinho - Ações Prêmios</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Poppins & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #131b2e;
+            --accent-color: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --border-color: #1e293b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-main);
+            color: #ffffff;
+            margin: 0;
+            padding-bottom: 110px;
+        }
+
+        /* Container centralizado para telas grandes e fluido no mobile */
+        .wrapper-container {
+            max-width: 550px;
+            margin: 0 auto;
+            background-color: #0d1322;
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .browser-top {
+            background-color: #080c14;
+            padding: 10px 15px;
+            font-size: 13px;
+            color: #94a3b8;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .browser-url {
+            background: #131b2e;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #cbd5e1;
+            text-align: center;
+            flex-grow: 1;
+            margin: 0 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .site-header {
+            background-color: var(--bg-card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo-area {
+            font-weight: 800;
+            font-size: 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-area i {
+            color: #f59e0b;
+            filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.5));
+        }
+
+        .logo-area span {
+            background: linear-gradient(45deg, #f59e0b, #fbbf24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-access {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-access:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #38bdf8;
+        }
+
+        /* Card Principal Estilizado */
+        .main-card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 20px 15px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .img-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .main-card:hover img {
+            transform: scale(1.03);
+        }
+
+        .badge-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(16, 185, 129, 0.9);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 30px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .card-body-custom {
+            padding: 20px;
+        }
+
+        /* Acordeão de Regulamento Moderno */
+        .regulation-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin: 0 15px 20px 15px;
+            overflow: hidden;
+        }
+
+        .regulation-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2e8f0;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .regulation-content {
+            padding: 0 20px 15px 20px;
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.6;
+            border-top: 1px solid rgba(255,255,255,0.03);
+            display: none;
+        }
+
+        .regulation-content.show {
+            display: block;
+        }
+
+        .price-badge {
+            font-size: 24px;
+            font-weight: 800;
+            color: #38bdf8;
+            text-align: center;
+            margin: 25px 0 15px 0;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Grade de Opções */
+        .numbers-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+
+        .number-option-card {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px 5px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .number-option-card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .number-option-card.active {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.05));
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+
+        .number-option-card .qty {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .number-option-card .label {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .number-option-card .price {
+            font-size: 13px;
+            color: #38bdf8;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .badge-popular {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #38bdf8, #2563eb);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Controle Manual */
+        .manual-control {
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .control-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .control-btn:hover {
+            background-color: #1e293b;
+            border-color: #3b82f6;
+        }
+
+        .manual-input {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            color: #fff;
+            text-align: center;
+            width: 120px;
+            height: 44px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 18px;
+            transition: border-color 0.2s;
+        }
+
+        .manual-input:focus {
+            border-color: #3b82f6;
+            outline: none;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Barra de Ação Fixa */
+        .bottom-action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 19, 34, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-color);
+            padding: 15px 20px;
+            z-index: 1000;
+        }
+
+        .action-bar-inner {
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .btn-participate {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border: none;
+            color: #fff;
+            font-weight: 700;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5); }
+            70% { box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+
+        .btn-participate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.6);
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 95px;
+            right: 20px;
+            background-color: #22c55e;
+            color: #fff;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+            z-index: 999;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            color: #fff;
+        }
+
+        /* Modal customizado */
+        .modal-content {
+            background-color: #131b2e;
+            color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        .modal-header, .modal-footer {
+            border-color: var(--border-color);
+            padding: 20px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-control {
+            background-color: #0b0f19;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 12px 15px;
+            border-radius: 10px;
+        }
+
+        .form-control:focus {
+            background-color: #0b0f19;
+            border-color: #3b82f6;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+
+        .pix-qrcode-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+    </style>
 </head>
-
-
 <body>
 
-
-<!-- =========================
-     HEADER
-========================= -->
-
-<header class="header">
-
-    <div class="logo">
-        <span class="logo-icon">🍬</span>
-        <span>Chicletinho</span>
-    </div>
-
-    <div class="header-status">
-        🟢 Sorteio aberto
-    </div>
-
-</header>
-
-
-
-<!-- =========================
-     HERO
-========================= -->
-
-<section class="hero">
-
-    <div class="hero-content">
-
-        <div class="badge">
-            🎟️ PARTICIPE DA RIFA
+    <div class="wrapper-container">
+        <!-- Barra simulando o navegador -->
+        <div class="browser-top">
+            <i class="fa-solid fa-xmark fs-5"></i>
+            <div class="browser-url">chicletinhopremios.com.br</div>
+            <i class="fa-brands fa-instagram fs-5"></i>
         </div>
 
-        <h1>
-            Sua sorte pode
-            <span>começar aqui!</span>
-        </h1>
-
-        <p>
-            Escolha quantos números deseja comprar,
-            faça seu pagamento via PIX e receba seus
-            números diretamente no WhatsApp e e-mail.
-        </p>
-
-        <div class="prize-card">
-
-            <div class="prize-icon">
-                🏆
+        <!-- Header do Site -->
+        <header class="site-header">
+            <div class="logo-area">
+                <i class="fa-solid fa-crown"></i> <span>CHICLETINHO</span>
             </div>
+            <button class="btn-access">Entrar</button>
+        </header>
 
-            <div>
-
-                <small>
-                    GRANDE PRÊMIO
-                </small>
-
-                <strong>
-                    Prêmio do Sorteio
-                </strong>
-
+        <!-- Card Principal com Imagem Profissional de iPhone -->
+        <div class="main-card">
+            <div class="img-container">
+                <span class="badge-status"><i class="fa-solid fa-fire"></i> Aberto</span>
+                <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=800&auto=format&fit=crop" alt="IPhone 17 Pro Max Studio">
             </div>
-
+            <div class="card-body-custom">
+                <h4 class="fw-bold mb-1">Iphone 17 Pro Max 256GB</h4>
+                <p class="text-muted small mb-0">✨ Concorra ao smartphone mais desejado do momento com frete grátis para todo o Brasil!</p>
+            </div>
         </div>
 
-    </div>
-
-
-    <div class="bubble bubble1"></div>
-    <div class="bubble bubble2"></div>
-    <div class="bubble bubble3"></div>
-
-</section>
-
-
-
-<!-- =========================
-     ÁREA DE COMPRA
-========================= -->
-
-<section class="purchase-section">
-
-    <div class="purchase-card">
-
-        <div class="card-header">
-
-            <div>
-
-                <small>
-                    CHICLETINHO
-                </small>
-
-                <h2>
-                    Comprar números
-                </h2>
-
-            </div>
-
-            <div class="price">
-
-                <strong>
-                    R$ 5,00
-                </strong>
-
-                <span>
-                    por número
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <form id="rifaForm">
-
-
-            <!-- NOME -->
-
-            <div class="input-group">
-
-                <label for="nome">
-                    Nome completo
-                </label>
-
-                <input
-                    type="text"
-                    id="nome"
-                    placeholder="Digite seu nome completo"
-                    autocomplete="name"
-                    required
-                >
-
-            </div>
-
-
-            <!-- DOCUMENTO / WHATSAPP -->
-
-            <div class="input-row">
-
-                <div class="input-group">
-
-                    <label for="documento">
-                        CPF / Documento
-                    </label>
-
-                    <input
-                        type="text"
-                        id="documento"
-                        placeholder="000.000.000-00"
-                        maxlength="18"
-                        required
-                    >
-
-                </div>
-
-
-                <div class="input-group">
-
-                    <label for="telefone">
-                        WhatsApp
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="telefone"
-                        placeholder="(00) 00000-0000"
-                        maxlength="15"
-                        required
-                    >
-
-                </div>
-
-            </div>
-
-
-            <!-- EMAIL -->
-
-            <div class="input-group">
-
-                <label for="email">
-                    E-mail
-                </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="seu@email.com"
-                    autocomplete="email"
-                    required
-                >
-
-            </div>
-
-
-            <!-- QUANTIDADE -->
-
-            <div class="quantity-box">
-
-                <div>
-
-                    <label>
-                        Quantidade de números
-                    </label>
-
-                    <span>
-                        Cada número custa R$ 5,00
-                    </span>
-
-                </div>
-
-
-                <div class="quantity-control">
-
-                    <button
-                        type="button"
-                        id="minus"
-                    >
-                        −
-                    </button>
-
-                    <input
-                        type="number"
-                        id="quantidade"
-                        value="1"
-                        min="1"
-                        max="100"
-                        readonly
-                    >
-
-                    <button
-                        type="button"
-                        id="plus"
-                    >
-                        +
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- TOTAL -->
-
-            <div class="total-box">
-
-                <span>
-                    Total
-                </span>
-
-                <strong id="total">
-                    R$ 5,00
-                </strong>
-
-            </div>
-
-
-            <!-- BOTÃO -->
-
-            <button
-                type="submit"
-                class="buy-button"
-            >
-
-                <span>
-                    Continuar para pagamento
-                </span>
-
-                <span>
-                    →
-                </span>
-
+        <!-- Seção de Descrição e Regulamento -->
+        <div class="regulation-card">
+            <button class="regulation-header" onclick="toggleRegulation()">
+                <span><i class="fa-solid fa-file-lines text-warning me-2"></i> Descrição e Regulamento Oficial</span>
+                <i class="fa-solid fa-chevron-down" id="regulationChevron"></i>
             </button>
-
-
-            <div class="security">
-
-                🔒 Seus dados são protegidos e utilizados
-                exclusivamente para sua participação.
-
+            <div class="regulation-content" id="regulationBody">
+                <p class="mb-2"><strong>1. Como funciona:</strong> O sorteio é realizado com base na extração da Loteria Federal. Seus números da sorte aparecem instantaneamente após a confirmação do pagamento.</p>
+                <p class="mb-2"><strong>2. Entrega:</strong> O prêmio é enviado totalmente grátis para a residência do ganhador com nota fiscal em seu nome.</p>
+                <p class="mb-0"><strong>3. Suporte:</strong> Em caso de dúvidas, utilize o botão do WhatsApp flutuante no canto da tela para falar diretamente com nossa equipe de atendimento.</p>
             </div>
+        </div>
 
+        <!-- Preço Unitário -->
+        <div class="price-badge" id="unitPriceDisplay">
+            R$ 0,03 <span class="fs-6 text-muted fw-normal">por número</span>
+        </div>
 
-        </form>
+        <!-- Grade de Opções de Pacotes -->
+        <div class="numbers-grid" id="packagesGrid">
+            <div class="number-option-card active" onclick="selectPackage(100, 3.00, this)">
+                <div class="qty">100</div>
+                <div class="label">números</div>
+                <div class="price">R$ 3,00</div>
+            </div>
+            <div class="number-option-card" onclick="selectPackage(167, 5.01, this)">
+                <div class="badge-popular">Popular</div>
+                <div class="qty">167</div>
+                <div class="label">números</div>
+                <div class="price">R$ 5,01</div>
+            </div>
+            <div class="number-option-card" onclick="selectPackage(200, 6.00, this)">
+                <div class="qty">200</div>
+                <div class="label">números</div>
+                <div class="price">R$ 6,00</div>
+            </div>
+            <div class="number-option-card" onclick="selectPackage(333, 9.99, this)">
+                <div class="qty">333</div>
+                <div class="label">números</div>
+                <div class="price">R$ 9,99</div>
+            </div>
+            <div class="number-option-card" onclick="selectPackage(500, 15.00, this)">
+                <div class="qty">500</div>
+                <div class="label">números</div>
+                <div class="price">R$ 15,00</div>
+            </div>
+            <div class="number-option-card" onclick="selectPackage(667, 20.01, this)">
+                <div class="qty">667</div>
+                <div class="label">números</div>
+                <div class="price">R$ 20,01</div>
+            </div>
+        </div>
 
+        <!-- Controle Manual -->
+        <div class="manual-control">
+            <button class="control-btn" onclick="adjustQuantity(-50)"><i class="fa-solid fa-minus"></i></button>
+            <input type="number" id="manualQuantity" class="manual-input" value="100" oninput="updateFromInput()">
+            <button class="control-btn" onclick="adjustQuantity(50)"><i class="fa-solid fa-plus"></i></button>
+        </div>
+
+        <!-- Botão WhatsApp Flutuante -->
+        <a href="#" class="whatsapp-float">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+
+        <!-- Barra Fixa Inferior -->
+        <div class="bottom-action-bar">
+            <div class="action-bar-inner">
+                <button class="btn-participate" id="participateBtn" onclick="openCheckoutModal()">
+                    <i class="fa-solid fa-cart-shopping"></i> Participar | R$ 3,00
+                </button>
+            </div>
+        </div>
     </div>
 
-</section>
+    <!-- MODAL DE CHECKOUT E PAGAMENTO -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                
+                <!-- ETAPA 1: Identificação -->
+                <div id="stepIdentification">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold">Identificação do Participante</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted small mb-4">Insira seus dados reais. O seu WhatsApp será a chave de identificação caso você seja o ganhador do prêmio.</p>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Seu Nome Completo</label>
+                            <input type="text" id="userName" class="form-control" placeholder="Ex: Eder Ribeiro">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Seu WhatsApp (com DDD)</label>
+                            <input type="text" id="userPhone" class="form-control" placeholder="Ex: (37) 99999-9999">
+                        </div>
+                        <div class="alert alert-dark border border-secondary text-center small mb-0 rounded-3">
+                            Você está adquirindo <strong id="modalSummaryQty" class="text-info">100</strong> números por <strong id="modalSummaryPrice" class="text-success">R$ 3,00</strong>.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary w-100 fw-bold py-2" onclick="proceedToPayment()">Continuar para o Pagamento (Pix)</button>
+                    </div>
+                </div>
 
+                <!-- ETAPA 2: Pix -->
+                <div id="stepPixPayment" style="display: none;">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold text-success"><i class="fa-solid fa-qrcode"></i> Pagamento via Pix</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p class="small text-muted mb-3">Escaneie o QR Code abaixo com o aplicativo do seu banco ou copie a chave Pix para pagar.</p>
+                        
+                        <div class="pix-qrcode-box mb-3">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=00020126580014br.gov.bcb.pix..." alt="QR Code Pix">
+                        </div>
 
+                        <div class="mb-3 text-start">
+                            <label class="form-label small text-muted">Pix Copia e Cola:</label>
+                            <div class="input-group">
+                                <input type="text" id="pixCodeText" class="form-control text-truncate font-monospace small" value="00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5913Chicletinho6009SaoPaulo62070503***" readonly>
+                                <button class="btn btn-outline-light" type="button" onclick="copyPixCode()"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
 
-<!-- =========================
-     COMO FUNCIONA
-========================= -->
+                        <div class="text-warning small mb-0">
+                            <i class="fa-regular fa-clock"></i> O pedido expira em <span id="timer">15:00</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer flex-column">
+                        <button type="button" class="btn btn-success w-100 fw-bold py-2" onclick="simulatePaymentApproval()"><i class="fa-solid fa-check"></i> Já fiz o pagamento</button>
+                        <button type="button" class="btn btn-link text-muted text-decoration-none small" onclick="backToIdentification()">Voltar e alterar dados</button>
+                    </div>
+                </div>
 
-<section class="how-section">
-
-    <div class="section-title">
-
-        <span>
-            É fácil participar
-        </span>
-
-        <h2>
-            Como funciona?
-        </h2>
-
+            </div>
+        </div>
     </div>
 
-
-    <div class="steps">
-
-
-        <div class="step">
-
-            <div class="step-number">
-                01
-            </div>
-
-            <div class="step-icon">
-                📝
-            </div>
-
-            <h3>
-                Preencha seus dados
-            </h3>
-
-            <p>
-                Informe seu nome, documento,
-                WhatsApp e e-mail.
-            </p>
-
-        </div>
-
-
-        <div class="step">
-
-            <div class="step-number">
-                02
-            </div>
-
-            <div class="step-icon">
-                💳
-            </div>
-
-            <h3>
-                Faça o pagamento
-            </h3>
-
-            <p>
-                Gere o PIX e pague o valor
-                correspondente aos números escolhidos.
-            </p>
-
-        </div>
-
-
-        <div class="step">
-
-            <div class="step-number">
-                03
-            </div>
-
-            <div class="step-icon">
-                🎟️
-            </div>
-
-            <h3>
-                Receba seus números
-            </h3>
-
-            <p>
-                Depois da confirmação do pagamento,
-                seus números serão enviados.
-            </p>
-
-        </div>
-
-
-    </div>
-
-</section>
-
-
-
-<!-- =========================
-     MODAL PAGAMENTO
-========================= -->
-
-<div
-    class="modal"
-    id="paymentModal"
->
-
-    <div class="modal-content">
-
-        <button
-            class="close"
-            id="closeModal"
-        >
-            ×
-        </button>
-
-
-        <div class="modal-icon">
-            💰
-        </div>
-
-        <h2>
-            Pagamento PIX
-        </h2>
-
-        <p>
-            Escaneie o QR Code ou copie o código PIX.
-        </p>
-
-
-        <div class="qr-container">
-
-            <div class="qrcode">
-
-                <span>
-                    PIX
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="payment-value">
-
-            <span>
-                Valor a pagar
-            </span>
-
-            <strong id="modalTotal">
-                R$ 5,00
-            </strong>
-
-        </div>
-
-
-        <div class="pix-code">
-
-            <input
-                type="text"
-                id="pixCode"
-                readonly
-            >
-
-            <button id="copyPix">
-                Copiar
-            </button>
-
-        </div>
-
-
-        <div class="waiting">
-
-            <div class="loader"></div>
-
-            <span>
-                Aguardando confirmação do pagamento...
-            </span>
-
-        </div>
-
-
-        <p class="payment-info">
-
-            Após a confirmação do pagamento,
-            seus números serão enviados para
-            o WhatsApp e e-mail informados.
-
-        </p>
-
-    </div>
-
-</div>
-
-
-
-<!-- =========================
-     MODAL SUCESSO
-========================= -->
-
-<div
-    class="modal"
-    id="successModal"
->
-
-    <div class="modal-content">
-
-        <div class="success-icon">
-            ✓
-        </div>
-
-        <h2>
-            Pagamento confirmado!
-        </h2>
-
-        <p>
-            Sua participação foi registrada.
-        </p>
-
-
-        <div class="numbers-box">
-
-            <span>
-                Seus números
-            </span>
-
-            <div id="rifaNumbers">
-                000001
-            </div>
-
-        </div>
-
-
-        <p class="success-info">
-
-            O comprovante foi enviado para
-            seu WhatsApp e e-mail.
-
-        </p>
-
-
-        <button
-            class="buy-button"
-            id="finishButton"
-        >
-
-            <span>
-                Fechar
-            </span>
-
-            <span>
-                ✓
-            </span>
-
-        </button>
-
-    </div>
-
-</div>
-
-
-
-<!-- =========================
-     TOAST
-========================= -->
-
-<div
-    class="toast"
-    id="toast"
->
-    PIX copiado!
-</div>
-
-
-
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer>
-
-    <div class="footer-logo">
-        🍬 Chicletinho
-    </div>
-
-    <p>
-        © 2026 Chicletinho. Todos os direitos reservados.
-    </p>
-
-    <small>
-        Consulte o regulamento do sorteio.
-    </small>
-
-</footer>
-
-
-
-<script>
-
-/* =====================================
-   CONFIGURAÇÕES
-===================================== */
-
-const VALOR_RIFA = 5.00;
-
-const MAX_RIFAS = 100;
-
-
-/* =====================================
-   ELEMENTOS
-===================================== */
-
-const quantidade =
-    document.getElementById("quantidade");
-
-const total =
-    document.getElementById("total");
-
-const plus =
-    document.getElementById("plus");
-
-const minus =
-    document.getElementById("minus");
-
-const form =
-    document.getElementById("rifaForm");
-
-const paymentModal =
-    document.getElementById("paymentModal");
-
-const successModal =
-    document.getElementById("successModal");
-
-const closeModal =
-    document.getElementById("closeModal");
-
-const modalTotal =
-    document.getElementById("modalTotal");
-
-const pixCode =
-    document.getElementById("pixCode");
-
-const copyPix =
-    document.getElementById("copyPix");
-
-const finishButton =
-    document.getElementById("finishButton");
-
-const toast =
-    document.getElementById("toast");
-
-
-/* =====================================
-   FORMATAÇÃO
-===================================== */
-
-function formatarReal(valor) {
-
-    return valor.toLocaleString(
-        "pt-BR",
-        {
-            style: "currency",
-            currency: "BRL"
-        }
-    );
-
-}
-
-
-/* =====================================
-   TOTAL
-===================================== */
-
-function atualizarTotal() {
-
-    const qtd =
-        Number(quantidade.value);
-
-    const valor =
-        qtd * VALOR_RIFA;
-
-    total.textContent =
-        formatarReal(valor);
-
-    modalTotal.textContent =
-        formatarReal(valor);
-
-}
-
-
-/* =====================================
-   BOTÃO +
-===================================== */
-
-plus.addEventListener(
-    "click",
-    function() {
-
-        let valor =
-            Number(quantidade.value);
-
-        if (valor < MAX_RIFAS) {
-
-            valor++;
-
-            quantidade.value =
-                valor;
-
-            atualizarTotal();
-
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Script de Funcionalidades -->
+    <script>
+        const pricePerNumber = 0.03;
+        let currentQuantity = 100;
+        let checkoutModalInstance;
+
+        const manualInput = document.getElementById('manualQuantity');
+        const participateBtn = document.getElementById('participateBtn');
+        const cards = document.querySelectorAll('.number-option-card');
+
+        // Acordeão de Regulamento
+        function toggleRegulation() {
+            const content = document.getElementById('regulationBody');
+            const chevron = document.getElementById('regulationChevron');
+            content.classList.toggle('show');
+            chevron.classList.toggle('fa-chevron-down');
+            chevron.classList.toggle('fa-chevron-up');
         }
 
-    }
-);
-
-
-/* =====================================
-   BOTÃO -
-===================================== */
-
-minus.addEventListener(
-    "click",
-    function() {
-
-        let valor =
-            Number(quantidade.value);
-
-        if (valor > 1) {
-
-            valor--;
-
-            quantidade.value =
-                valor;
-
-            atualizarTotal();
-
+        function updateUI(qty) {
+            currentQuantity = qty > 0 ? qty : 1;
+            manualInput.value = currentQuantity;
+            const totalPrice = (currentQuantity * pricePerNumber).toFixed(2).replace('.', ',');
+            participateBtn.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> Participar | R$ ${totalPrice}`;
+            
+            document.getElementById('modalSummaryQty').innerText = currentQuantity;
+            document.getElementById('modalSummaryPrice').innerText = `R$ ${totalPrice}`;
         }
 
-    }
-);
-
-
-/* =====================================
-   MÁSCARA CPF
-===================================== */
-
-document
-.getElementById("documento")
-.addEventListener(
-    "input",
-    function(e) {
-
-        let value =
-            e.target.value
-            .replace(/\D/g, "");
-
-        if (value.length > 11) {
-            value =
-                value.substring(0, 11);
+        function selectPackage(qty, price, element) {
+            cards.forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            updateUI(qty);
         }
 
-        value =
-            value.replace(
-                /(\d{3})(\d)/,
-                "$1.$2"
-            );
-
-        value =
-            value.replace(
-                /(\d{3})(\d)/,
-                "$1.$2"
-            );
-
-        value =
-            value.replace(
-                /(\d{3})(\d{1,2})$/,
-                "$1-$2"
-            );
-
-        e.target.value =
-            value;
-
-    }
-);
-
-
-/* =====================================
-   MÁSCARA WHATSAPP
-===================================== */
-
-document
-.getElementById("telefone")
-.addEventListener(
-    "input",
-    function(e) {
-
-        let value =
-            e.target.value
-            .replace(/\D/g, "");
-
-        if (value.length > 11) {
-            value =
-                value.substring(0, 11);
+        function adjustQuantity(amount) {
+            let newQty = currentQuantity + amount;
+            if (newQty < 1) newQty = 1;
+            cards.forEach(c => c.classList.remove('active'));
+            updateUI(newQty);
         }
 
-        if (value.length <= 10) {
-
-            value =
-                value.replace(
-                    /(\d{2})(\d)/,
-                    "($1) $2"
-                );
-
-            value =
-                value.replace(
-                    /(\d{4})(\d)/,
-                    "$1-$2"
-                );
-
-        } else {
-
-            value =
-                value.replace(
-                    /(\d{2})(\d)/,
-                    "($1) $2"
-                );
-
-            value =
-                value.replace(
-                    /(\d{5})(\d)/,
-                    "$1-$2"
-                );
-
+        function updateFromInput() {
+            let val = parseInt(manualInput.value);
+            if (isNaN(val) || val < 1) val = 1;
+            cards.forEach(c => c.classList.remove('active'));
+            updateUI(val);
         }
 
-        e.target.value =
-            value;
-
-    }
-);
-
-
-/* =====================================
-   GERAR PIX DEMONSTRATIVO
-===================================== */
-
-function gerarPixDemonstracao(
-    valor
-) {
-
-    const codigo =
-        "00020126580014BR.GOV.BCB.PIX" +
-        "0136CHICLETINHO-RIFA-" +
-        Date.now() +
-        "520400005303986540" +
-        valor.toFixed(2) +
-        "5802BR";
-
-    pixCode.value =
-        codigo;
-
-}
-
-
-/* =====================================
-   ABRIR PAGAMENTO
-===================================== */
-
-form.addEventListener(
-    "submit",
-    function(event) {
-
-        event.preventDefault();
-
-
-        const nome =
-            document
-            .getElementById("nome")
-            .value
-            .trim();
-
-        const documento =
-            document
-            .getElementById("documento")
-            .value
-            .trim();
-
-        const telefone =
-            document
-            .getElementById("telefone")
-            .value
-            .trim();
-
-        const email =
-            document
-            .getElementById("email")
-            .value
-            .trim();
-
-        const qtd =
-            Number(quantidade.value);
-
-
-        if (
-            !nome ||
-            !documento ||
-            !telefone ||
-            !email
-        ) {
-
-            mostrarToast(
-                "Preencha todos os campos."
-            );
-
-            return;
-
+        // Funções do Checkout
+        function openCheckoutModal() {
+            document.getElementById('stepIdentification').style.display = 'block';
+            document.getElementById('stepPixPayment').style.display = 'none';
+            
+            checkoutModalInstance = new bootstrap.Modal(document.getElementById('checkoutModal'));
+            checkoutModalInstance.show();
         }
 
+        function proceedToPayment() {
+            const name = document.getElementById('userName').value.trim();
+            const phone = document.getElementById('userPhone').value.trim();
 
-        if (qtd < 1 || qtd > MAX_RIFAS) {
+            if (!name || !phone) {
+                alert('Por favor, preencha seu Nome e seu WhatsApp.');
+                return;
+            }
 
-            mostrarToast(
-                "Quantidade inválida."
-            );
-
-            return;
-
+            document.getElementById('stepIdentification').style.display = 'none';
+            document.getElementById('stepPixPayment').style.display = 'block';
         }
 
-
-        const valorTotal =
-            qtd * VALOR_RIFA;
-
-
-        modalTotal.textContent =
-            formatarReal(valorTotal);
-
-
-        gerarPixDemonstracao(
-            valorTotal
-        );
-
-
-        paymentModal
-            .classList
-            .add("active");
-
-
-        /*
-        ===================================================
-        PAGAMENTO REAL
-        ===================================================
-
-        EM PRODUÇÃO:
-
-        Aqui o navegador deverá enviar os dados
-        para o seu BACKEND.
-
-        Exemplo:
-
-        fetch("/api/criar-pagamento", {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type":
-                    "application/json"
-            },
-
-            body: JSON.stringify({
-
-                nome: nome,
-
-                documento: documento,
-
-                telefone: telefone,
-
-                email: email,
-
-                quantidade: qtd,
-
-                valor: valorTotal
-
-            })
-
-        });
-
-        O servidor deverá:
-
-        1. Criar uma cobrança PIX.
-        2. Receber o QR Code verdadeiro.
-        3. Retornar o QR Code para esta página.
-        4. Aguardar o webhook do banco/gateway.
-        5. Confirmar o pagamento.
-        6. Gerar os números da rifa.
-        7. Enviar o comprovante.
-
-        ===================================================
-        */
-
-    }
-);
-
-
-/* =====================================
-   COPIAR PIX
-===================================== */
-
-copyPix.addEventListener(
-    "click",
-    async function() {
-
-        try {
-
-            await navigator
-                .clipboard
-                .writeText(
-                    pixCode.value
-                );
-
-            mostrarToast(
-                "Código PIX copiado!"
-            );
-
-        } catch {
-
-            pixCode.select();
-
-            document.execCommand(
-                "copy"
-            );
-
-            mostrarToast(
-                "Código PIX copiado!"
-            );
-
+        function backToIdentification() {
+            document.getElementById('stepPixPayment').style.display = 'none';
+            document.getElementById('stepIdentification').style.display = 'block';
         }
 
-    }
-);
-
-
-/* =====================================
-   TOAST
-===================================== */
-
-function mostrarToast(
-    mensagem
-) {
-
-    toast.textContent =
-        mensagem;
-
-    toast.classList.add(
-        "show"
-    );
-
-    setTimeout(
-        function() {
-
-            toast.classList.remove(
-                "show"
-            );
-
-        },
-        2500
-    );
-
-}
-
-
-/* =====================================
-   FECHAR MODAL
-===================================== */
-
-closeModal.addEventListener(
-    "click",
-    function() {
-
-        paymentModal
-            .classList
-            .remove("active");
-
-    }
-);
-
-
-/* =====================================
-   FECHAR SUCESSO
-===================================== */
-
-finishButton.addEventListener(
-    "click",
-    function() {
-
-        successModal
-            .classList
-            .remove("active");
-
-    }
-);
-
-
-/* =====================================
-   FECHAR CLICANDO FORA
-===================================== */
-
-paymentModal.addEventListener(
-    "click",
-    function(event) {
-
-        if (
-            event.target ===
-            paymentModal
-        ) {
-
-            paymentModal
-                .classList
-                .remove("active");
-
+        function copyPixCode() {
+            const pixInput = document.getElementById('pixCodeText');
+            pixInput.select();
+            pixInput.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(pixInput.value);
+            alert('Código Pix Copia e Cola copiado com sucesso!');
         }
 
-    }
-);
-
-
-/* =====================================
-   GERAR NÚMEROS
-===================================== */
-
-function gerarNumerosDemo() {
-
-    const qtd =
-        Number(
-            quantidade.value
-        );
-
-    let numeros = [];
-
-
-    for (
-        let i = 0;
-        i < qtd;
-        i++
-    ) {
-
-        const numero =
-            Math.floor(
-                Math.random() * 999999
-            );
-
-        numeros.push(
-            String(numero)
-            .padStart(
-                6,
-                "0"
-            )
-        );
-
-    }
-
-
-    document
-        .getElementById(
-            "rifaNumbers"
-        )
-        .textContent =
-            numeros.join(" • ");
-
-}
-
-
-/* =====================================
-   SIMULAÇÃO DE PAGAMENTO
-===================================== */
-
-/*
-    Esta função é apenas para testar
-    a interface.
-
-    Em um sistema real ela deve ser
-    substituída pela confirmação do
-    webhook do pagamento.
-*/
-
-function simularPagamento() {
-
-    paymentModal
-        .classList
-        .remove("active");
-
-
-    gerarNumerosDemo();
-
-
-    successModal
-        .classList
-        .add("active");
-
-}
-
-
-/* =====================================
-   INICIALIZAÇÃO
-===================================== */
-
-atualizarTotal();
-
-
-/*
-    Para testar a tela de pagamento
-    manualmente no navegador:
-
-    Abra o console (F12) e execute:
-
-    simularPagamento();
-
-*/
-
-
-</script>
-
+        function simulatePaymentApproval() {
+            alert('Simulação bem-sucedida! Pagamento confirmado e bilhetes gerados com sucesso.');
+            checkoutModalInstance.hide();
+        }
+    </script>
 </body>
 </html>
