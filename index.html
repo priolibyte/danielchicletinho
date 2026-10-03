@@ -333,7 +333,7 @@
                 <i class="fa-solid fa-chevron-down" id="regulationChevron"></i>
             </button>
             <div class="regulation-content" id="regulationBody">
-                <p class="mb-2"><strong>1. Como funciona:</strong> Escolha seus números, transfira via Pix para a chave do Daniel, baixe seu comprovante em PDF e envie o print no WhatsApp.</p>
+                <p class="mb-2"><strong>1. Como funciona:</strong> Escolha seus números, copie o Pix com o valor exato, baixe seu comprovante em PDF e envie o print no WhatsApp.</p>
                 <p class="mb-2"><strong>2. Sorteio:</strong> Apuração transparente baseada na extração oficial da Loteria Federal.</p>
                 <p class="mb-0"><strong>3. Suporte:</strong> Dúvidas diretas pelo WhatsApp oficial.</p>
             </div>
@@ -408,22 +408,27 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary w-100 fw-bold py-2" onclick="generatePixAndNumbers()">Gerar Pix e Meus Números</button>
+                        <button type="button" class="btn btn-primary w-100 fw-bold py-2" onclick="generatePixAndNumbers()">Gerar Pix e QR Code</button>
                     </div>
                 </div>
 
                 <div id="stepPixPayment" style="display: none;">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold text-success"><i class="fa-solid fa-qrcode"></i> Pague via Pix (Copia e Cola)</h5>
+                        <h5 class="modal-title fw-bold text-success"><i class="fa-solid fa-qrcode"></i> Pague via Pix</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-center">
-                        <p class="small text-muted mb-3">Copie a chave Pix abaixo e cole no aplicativo do seu banco, digitando o valor exato correspondente:</p>
+                        <p class="small text-muted mb-2">Escaneie o QR Code abaixo ou copie o Pix Copia e Cola com o valor exato da sua compra:</p>
                         
+                        <!-- QR Code gerado visualmente -->
+                        <div class="bg-white p-2 d-inline-block rounded mb-3 shadow">
+                            <img id="qrCodeImageTag" src="" alt="QR Code Pix" style="width: 150px; height: 150px;">
+                        </div>
+
                         <div class="mb-3 text-start">
-                            <label class="form-label small text-muted fw-semibold">Chave Pix (Copia e Cola):</label>
+                            <label class="form-label small text-muted fw-semibold">Pix Copia e Cola (Com Valor Embutido):</label>
                             <div class="input-group">
-                                <input type="text" id="pixKeyText" class="form-control font-monospace small text-center bg-dark text-warning fw-bold" value="7f5d5abd-c9a3-4bbf-8468-c70badebc279" readonly>
+                                <input type="text" id="pixKeyText" class="form-control font-monospace small text-center bg-dark text-warning fw-bold" readonly>
                                 <button class="btn btn-warning fw-bold text-dark px-3" type="button" onclick="copyPixKey()"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
                             </div>
                         </div>
@@ -432,9 +437,9 @@
                             <strong>Valor da Compra:</strong> <span id="displayTotalPixValue" class="fw-bold text-info">R$ 10,00</span>
                         </div>
 
-                        <!-- Caixa de aviso do temporizador -->
+                        <!-- Timer de 5 minutos -->
                         <div class="alert alert-warning small text-center py-3" id="timerBox" style="display: none;">
-                            <i class="fa-solid fa-clock fa-spin me-1"></i> Chave copiada! Você tem <strong id="countdownTimer">05:00</strong> para efetuar o pagamento. Seus números serão gerados em instantes e o PDF baixará automaticamente.
+                            <i class="fa-solid fa-clock fa-spin me-1"></i> Chave copiada! Você tem <strong id="countdownTimer">05:00</strong> para efetuar o pagamento. Seus números serão gerados automaticamente e o PDF será baixado.
                         </div>
 
                         <div class="d-grid gap-2" id="actionButtonsArea" style="display: none !important;">
@@ -484,7 +489,6 @@
         const PIX_CHAVE_DANIEL = "7f5d5abd-c9a3-4bbf-8468-c70badebc279"; 
         const WHATSAPP_DANIEL = "5537991923068";
 
-        document.getElementById('pixKeyText').value = PIX_CHAVE_DANIEL;
         document.getElementById('whatsappFloat').href = `https://wa.me/${WHATSAPP_DANIEL}?text=Olá%20Daniel,%20estou%20com%20dúvidas%20na%20rifa!`;
 
         const manualInput = document.getElementById('manualQuantity');
@@ -539,6 +543,49 @@
             checkoutModalInstance.show();
         }
 
+        // Função que monta o Payload Pix Estático com o valor exato
+        function gerarPayloadPixEstatico(chave, valorStr, nomeRecebedor, cidadeRecebedor) {
+            // Formatação do Payload EMV para Pix Estático com Valor Definido
+            function formato(id, valor) {
+                let tamanho = String(valor.length).padStart(2, '0');
+                return id + tamanho + valor;
+            }
+
+            let payloadGui = formato("00", "br.gov.bcb.pix") + formato("01", chave);
+            let payloadMerchant = formato("26", payloadGui) +
+                                  formatosDeMerchant(52, "0000") +
+                                  formatosDeMerchant(53, "986") +
+                                  formatosDeMerchant(54, valorStr) +
+                                  formatosDeMerchant(58, "BR") +
+                                  formatosDeMerchant(59, nomeRecebedor) +
+                                  formatosDeMerchant(60, cidadeRecebedor) +
+                                  formatosDeMerchant(62, formato("05", "CHICLETINHO"));
+            
+            let payloadSemCRC = payloadMerchant + "6304";
+            let crc16 = calcularCRC16(payloadSemCRC);
+            return payloadSemCRC + crc16;
+
+            function formatosDeMerchant(id, val) {
+                return id + String(val.length).padStart(2, '0') + val;
+            }
+
+            function calcularCRC16(str) {
+                let crc = 0xFFFF;
+                for (let c = 0; c < str.length; c++) {
+                    crc ^= str.charCodeAt(c) << 8;
+                    for (let i = 0; i < 8; i++) {
+                        if (crc & 0x8000) {
+                            crc = (crc << 1) ^ 0x1021;
+                        } else {
+                            crc = crc << 1;
+                        }
+                    }
+                }
+                let hex = (crc & 0xFFFF).toString(16).toUpperCase();
+                return hex.padStart(4, '0');
+            }
+        }
+
         function generatePixAndNumbers() {
             const name = document.getElementById('userName').value.trim();
             const cpf = document.getElementById('userCpf').value.trim();
@@ -552,24 +599,29 @@
             const totalPrice = (currentQuantity * pricePerNumber).toFixed(2);
             document.getElementById('displayTotalPixValue').innerText = `R$ ${totalPrice.replace('.', ',')}`;
 
+            // Cria o payload Pix Estático com o valor da compra embutido
+            const pixPayloadCopiaECola = gerarPayloadPixEstatico(PIX_CHAVE_DANIEL, totalPrice, "EDER REIS RIBEIRO", "DIVINOPOLIS");
+            document.getElementById('pixKeyText').value = pixPayloadCopiaECola;
+
+            // Gera o QR Code visual dinamicamente com base no payload copia e cola
+            document.getElementById('qrCodeImageTag').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(pixPayloadCopiaECola)}`;
+
             document.getElementById('stepIdentification').style.display = 'none';
             document.getElementById('stepPixPayment').style.display = 'block';
         }
 
-        // Função executada ao clicar no botão Copiar Chave Pix
         function copyPixKey() {
             const pixInput = document.getElementById('pixKeyText');
             pixInput.select();
             pixInput.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(pixInput.value);
             
-            // Exibe o aviso e o temporizador de 5 minutos
             document.getElementById('timerBox').style.display = 'block';
             startTimerAndGeneration();
         }
 
         function startTimerAndGeneration() {
-            let timeLeft = 300; // 5 minutos em segundos
+            let timeLeft = 300; // 5 minutos
             const timerDisplay = document.getElementById('countdownTimer');
             
             const countdownInterval = setInterval(() => {
@@ -583,10 +635,10 @@
                 timeLeft--;
             }, 1000);
 
-            // Define o tempo para gerar os números entre 3 e 5 minutos (ex: 4 minutos = 240000ms, vamos usar 3 minutos = 180000ms para teste seguro)
+            // Gera os números entre 3 e 5 minutos (configurado para 3 min / 180000ms)
             setTimeout(() => {
                 finalizeNumbersAndSave();
-            }, 180000); // 3 minutos cravados
+            }, 180000);
         }
 
         async function finalizeNumbersAndSave() {
@@ -595,7 +647,6 @@
             const phone = document.getElementById('userPhone').value.trim();
             const totalPrice = (currentQuantity * pricePerNumber).toFixed(2);
 
-            // Gera os números da sorte
             generatedNumbersList = [];
             while(generatedNumbersList.length < currentQuantity) {
                 let randomNum = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
@@ -604,7 +655,6 @@
                 }
             }
 
-            // Salva no Firestore em segundo plano
             if (db) {
                 let dispositivo = /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry/i.test(navigator.userAgent) ? "Celular/Mobile" : "Computador/Desktop";
                 db.collection("participantes").add({
@@ -619,15 +669,12 @@
                 }).catch(err => console.log("Aviso do banco:", err));
             }
 
-            // Atualiza o link do WhatsApp com os números gerados
             const msgZap = `Olá Daniel! Segue meu comprovante de R$ ${totalPrice} da rifa de R$ 1.000,00 no Pix. Nome: ${name}, CPF: ${cpf}. Meus números: ${generatedNumbersList.slice(0, 5).join(', ')}...`;
             document.getElementById('whatsappSendBtn').href = `https://wa.me/${WHATSAPP_DANIEL}?text=${encodeURIComponent(msgZap)}`;
 
-            // Esconde o timer e exibe os botões de comprovante/WhatsApp
             document.getElementById('timerBox').innerHTML = `<i class="fa-solid fa-check-circle text-success me-1"></i> <strong>Sucesso!</strong> Seus números foram gerados e o PDF foi baixado automaticamente.`;
             document.getElementById('actionButtonsArea').style.setProperty('display', 'grid', 'important');
 
-            // Dispara o download automático do PDF
             downloadPDFReceipt();
         }
 
