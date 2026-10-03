@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicletinho - Ações Prêmios</title>
+    <title>Chicletinho - Ações Prêmios V.1.5 teste</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Poppins & Icons -->
@@ -368,7 +368,7 @@
             <button class="control-btn" onclick="adjustQuantity(50)"><i class="fa-solid fa-plus"></i></button>
         </div>
 
-        <a href="https://wa.me/5537991923068?text=Olá%20Daniel,%20estou%20com%20dúvidas%20na%20rifa!" target="_blank" class="whatsapp-float" id="whatsappFloat"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" target="_blank" class="whatsapp-float" id="whatsappFloat"><i class="fa-brands fa-whatsapp"></i></a>
 
         <div class="bottom-action-bar">
             <div class="action-bar-inner">
@@ -460,6 +460,7 @@
         </div>
     </div>
 
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -543,47 +544,41 @@
             checkoutModalInstance.show();
         }
 
-        // Função que monta o Payload Pix Estático com o valor exato
+        // Função do Payload EMV Pix Estático com Valor Definido rigorosamente ajustada
         function gerarPayloadPixEstatico(chave, valorStr, nomeRecebedor, cidadeRecebedor) {
-            // Formatação do Payload EMV para Pix Estático com Valor Definido
-            function formato(id, valor) {
-                let tamanho = String(valor.length).padStart(2, '0');
-                return id + tamanho + valor;
+            function formatField(id, value) {
+                const len = String(value.length).padStart(2, '0');
+                return id + len + value;
             }
 
-            let payloadGui = formato("00", "br.gov.bcb.pix") + formato("01", chave);
-            let payloadMerchant = formato("26", payloadGui) +
-                                  formatosDeMerchant(52, "0000") +
-                                  formatosDeMerchant(53, "986") +
-                                  formatosDeMerchant(54, valorStr) +
-                                  formatosDeMerchant(58, "BR") +
-                                  formatosDeMerchant(59, nomeRecebedor) +
-                                  formatosDeMerchant(60, cidadeRecebedor) +
-                                  formatosDeMerchant(62, formato("05", "CHICLETINHO"));
+            const gui = formatField('00', 'br.gov.bcb.pix') + formatField('01', chave);
+            const merchantAccount = formatField('26', gui);
+            const mcc = formatField('52', '0000');
+            const currency = formatField('53', '986'); // BRL
+            const amount = formatField('54', valorStr);
+            const country = formatField('58', 'BR');
+            const name = formatField('59', nomeRecebedor.substring(0, 25));
+            const city = formatField('60', cidadeRecebedor.substring(0, 15));
             
-            let payloadSemCRC = payloadMerchant + "6304";
-            let crc16 = calcularCRC16(payloadSemCRC);
-            return payloadSemCRC + crc16;
+            const additionalData = formatField('05', 'CHICLETINHO');
+            const additional = formatField('62', additionalData);
 
-            function formatosDeMerchant(id, val) {
-                return id + String(val.length).padStart(2, '0') + val;
-            }
-
-            function calcularCRC16(str) {
-                let crc = 0xFFFF;
-                for (let c = 0; c < str.length; c++) {
-                    crc ^= str.charCodeAt(c) << 8;
-                    for (let i = 0; i < 8; i++) {
-                        if (crc & 0x8000) {
-                            crc = (crc << 1) ^ 0x1021;
-                        } else {
-                            crc = crc << 1;
-                        }
+            const payloadWithoutCRC = merchantAccount + mcc + currency + amount + country + name + city + additional + '6304';
+            
+            // Cálculo oficial CRC16-CCITT
+            let crc = 0xFFFF;
+            for (let c = 0; c < payloadWithoutCRC.length; c++) {
+                crc ^= payloadWithoutCRC.charCodeAt(c) << 8;
+                for (let i = 0; i < 8; i++) {
+                    if (crc & 0x8000) {
+                        crc = (crc << 1) ^ 0x1021;
+                    } else {
+                        crc = crc << 1;
                     }
                 }
-                let hex = (crc & 0xFFFF).toString(16).toUpperCase();
-                return hex.padStart(4, '0');
             }
+            const crcHex = (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+            return payloadWithoutCRC + crcHex;
         }
 
         function generatePixAndNumbers() {
@@ -599,11 +594,11 @@
             const totalPrice = (currentQuantity * pricePerNumber).toFixed(2);
             document.getElementById('displayTotalPixValue').innerText = `R$ ${totalPrice.replace('.', ',')}`;
 
-            // Cria o payload Pix Estático com o valor da compra embutido
+            // Gera o Pix Copia e Cola estruturado corretamente
             const pixPayloadCopiaECola = gerarPayloadPixEstatico(PIX_CHAVE_DANIEL, totalPrice, "EDER REIS RIBEIRO", "DIVINOPOLIS");
             document.getElementById('pixKeyText').value = pixPayloadCopiaECola;
 
-            // Gera o QR Code visual dinamicamente com base no payload copia e cola
+            // Gera o QR Code visual correspondente
             document.getElementById('qrCodeImageTag').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(pixPayloadCopiaECola)}`;
 
             document.getElementById('stepIdentification').style.display = 'none';
@@ -635,7 +630,6 @@
                 timeLeft--;
             }, 1000);
 
-            // Gera os números entre 3 e 5 minutos (configurado para 3 min / 180000ms)
             setTimeout(() => {
                 finalizeNumbersAndSave();
             }, 180000);
