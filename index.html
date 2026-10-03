@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicletinho - Ações Prêmios</title>
+    <title>Chicletinho - versão de teste 3</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Poppins & Icons -->
@@ -487,7 +487,8 @@
         let checkoutModalInstance;
         let generatedNumbersList = [];
 
-        const PIX_CHAVE_DANIEL = "7f5d5abd-c9a3-4bbf-8468-c70badebc279"; 
+        // Chave Pix CPF definida corretamente
+        const PIX_CHAVE_CPF = "06230348675"; 
         const WHATSAPP_DANIEL = "5537991923068";
 
         document.getElementById('whatsappFloat').href = `https://wa.me/${WHATSAPP_DANIEL}?text=Olá%20Daniel,%20estou%20com%20dúvidas%20na%20rifa!`;
@@ -544,14 +545,15 @@
             checkoutModalInstance.show();
         }
 
-        // Função geradora de Payload EMV limpa focando puramente na chave aleatória e valor
-        function gerarPayloadPixEstatico(chave, valorStr, nomeRecebedor, cidadeRecebedor) {
+        // Gerador de Payload EMV com chave CPF estruturada perfeitamente para o BACEN
+        function gerarPayloadPixCpf(cpf, valorStr, nomeRecebedor, cidadeRecebedor) {
             function formatField(id, value) {
                 const len = String(value.length).padStart(2, '0');
                 return id + len + value;
             }
 
-            const gui = formatField('00', 'br.gov.bcb.pix') + formatField('01', chave);
+            // Bloco do Pix (ID 26) contendo o domínio do Bacen e a chave CPF do recebedor (sub-tag 01)
+            const gui = formatField('00', 'br.gov.bcb.pix') + formatField('01', cpf);
             const merchantAccount = formatField('26', gui);
             const mcc = formatField('52', '0000');
             const currency = formatField('53', '986'); // BRL
@@ -559,11 +561,11 @@
             const country = formatField('58', 'BR');
             const name = formatField('59', nomeRecebedor.substring(0, 25));
             const city = formatField('60', cidadeRecebedor.substring(0, 15));
+            const txid = formatField('62', formatField('05', '***')); // Identificador padrão
+
+            const payloadWithoutCRC = '000201' + merchantAccount + mcc + currency + amount + country + name + city + txid + '6304';
             
-            // Removido o campo adicional customizado para garantir compatibilidade total com a chave aleatória pura nos bancos
-            const payloadWithoutCRC = merchantAccount + mcc + currency + amount + country + name + city + '6304';
-            
-            // Cálculo oficial CRC16-CCITT
+            // Cálculo do CRC16-CCITT oficial
             let crc = 0xFFFF;
             for (let c = 0; c < payloadWithoutCRC.length; c++) {
                 crc ^= payloadWithoutCRC.charCodeAt(c) << 8;
@@ -581,10 +583,10 @@
 
         function generatePixAndNumbers() {
             const name = document.getElementById('userName').value.trim();
-            const cpf = document.getElementById('userCpf').value.trim();
+            const cpfUser = document.getElementById('userCpf').value.trim();
             const phone = document.getElementById('userPhone').value.trim();
 
-            if (!name || !cpf || !phone) {
+            if (!name || !cpfUser || !phone) {
                 alert('Por favor, preencha Nome, CPF e WhatsApp.');
                 return;
             }
@@ -592,8 +594,8 @@
             const totalPrice = (currentQuantity * pricePerNumber).toFixed(2);
             document.getElementById('displayTotalPixValue').innerText = `R$ ${totalPrice.replace('.', ',')}`;
 
-            // Utiliza estritamente a chave aleatória pura do Daniel + o valor da compra
-            const pixPayloadCopiaECola = gerarPayloadPixEstatico(PIX_CHAVE_DANIEL, totalPrice, "EDER REIS RIBEIRO", "DIVINOPOLIS");
+            // Gera o Pix Copia e Cola embutindo o seu CPF e o valor exato
+            const pixPayloadCopiaECola = gerarPayloadPixCpf(PIX_CHAVE_CPF, totalPrice, "EDER REIS RIBEIRO", "DIVINOPOLIS");
             document.getElementById('pixKeyText').value = pixPayloadCopiaECola;
 
             // Gera o QR Code visual correspondente
@@ -635,7 +637,7 @@
 
         async function finalizeNumbersAndSave() {
             const name = document.getElementById('userName').value.trim();
-            const cpf = document.getElementById('userCpf').value.trim();
+            const cpfUser = document.getElementById('userCpf').value.trim();
             const phone = document.getElementById('userPhone').value.trim();
             const totalPrice = (currentQuantity * pricePerNumber).toFixed(2);
 
@@ -651,7 +653,7 @@
                 let dispositivo = /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry/i.test(navigator.userAgent) ? "Celular/Mobile" : "Computador/Desktop";
                 db.collection("participantes").add({
                     nome: name,
-                    cpf: cpf,
+                    cpf: cpfUser,
                     whatsapp: phone,
                     quantidadeNumeros: currentQuantity,
                     numerosSorte: generatedNumbersList,
@@ -661,7 +663,7 @@
                 }).catch(err => console.log("Aviso do banco:", err));
             }
 
-            const msgZap = `Olá Daniel! Segue meu comprovante de R$ ${totalPrice} da rifa de R$ 1.000,00 no Pix. Nome: ${name}, CPF: ${cpf}. Meus números: ${generatedNumbersList.slice(0, 5).join(', ')}...`;
+            const msgZap = `Olá Daniel! Segue meu comprovante de R$ ${totalPrice} da rifa de R$ 1.000,00 no Pix. Nome: ${name}, CPF: ${cpfUser}. Meus números: ${generatedNumbersList.slice(0, 5).join(', ')}...`;
             document.getElementById('whatsappSendBtn').href = `https://wa.me/${WHATSAPP_DANIEL}?text=${encodeURIComponent(msgZap)}`;
 
             document.getElementById('timerBox').innerHTML = `<i class="fa-solid fa-check-circle text-success me-1"></i> <strong>Sucesso!</strong> Seus números foram gerados e o PDF foi baixado automaticamente.`;
@@ -675,7 +677,7 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             const name = document.getElementById('userName').value;
-            const cpf = document.getElementById('userCpf').value;
+            const cpfUser = document.getElementById('userCpf').value;
             const phone = document.getElementById('userPhone').value;
             const totalPrice = (currentQuantity * pricePerNumber).toFixed(2);
 
@@ -696,7 +698,7 @@
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(13);
             doc.text(`Participante: ${name}`, 20, 52);
-            doc.text(`CPF: ${cpf}`, 20, 60);
+            doc.text(`CPF: ${cpfUser}`, 20, 60);
             doc.text(`WhatsApp: ${phone}`, 20, 68);
             doc.text(`Quantidade de Números: ${currentQuantity}`, 20, 76);
             doc.text(`Valor Pago: R$ ${totalPrice}`, 20, 84);
