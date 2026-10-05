@@ -160,8 +160,8 @@
         .regulation-content.show { display: block; }
 
         .price-badge {
-            font-size: 24px;
-            font-weight: 800;
+            font-size: 20px;
+            font-weight: 700;
             color: #38bdf8;
             text-align: center;
             margin: 25px 0 15px 0;
@@ -172,14 +172,14 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
             padding: 0 15px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .number-option-card {
             background-color: var(--bg-card);
             border: 2px solid var(--border-color);
             border-radius: 12px;
-            padding: 15px 5px;
+            padding: 18px 5px;
             text-align: center;
             cursor: pointer;
             position: relative;
@@ -207,40 +207,6 @@
             padding: 3px 10px;
             border-radius: 20px;
             text-transform: uppercase;
-        }
-
-        .manual-control {
-            padding: 0 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-
-        .control-btn {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: #fff;
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        .manual-input {
-            background-color: var(--bg-card);
-            border: 2px solid var(--border-color);
-            color: #fff;
-            text-align: center;
-            width: 120px;
-            height: 44px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 18px;
         }
 
         .bottom-action-bar {
@@ -333,14 +299,14 @@
                 <i class="fa-solid fa-chevron-down" id="regulationChevron"></i>
             </button>
             <div class="regulation-content" id="regulationBody">
-                <p class="mb-2"><strong>1. Como funciona:</strong> Escolha seus números, faça o Pix para a chave informada, baixe seu comprovante em PDF e envie o print no WhatsApp do Daniel.</p>
+                <p class="mb-2"><strong>1. Como funciona:</strong> Escolha um dos pacotes de números, pague via Pix Copia e Cola, baixe seu comprovante em PDF e envie o print no WhatsApp do Daniel.</p>
                 <p class="mb-2"><strong>2. Sorteio:</strong> Apuração transparente baseada na extração oficial da Loteria Federal.</p>
                 <p class="mb-0"><strong>3. Suporte:</strong> Dúvidas diretas pelo WhatsApp oficial.</p>
             </div>
         </div>
 
-        <div class="price-badge" id="unitPriceDisplay">
-            R$ 0,10 <span class="fs-6 text-muted fw-normal">por número</span>
+        <div class="price-badge">
+            Selecione sua quantidade de números:
         </div>
 
         <div class="numbers-grid" id="packagesGrid">
@@ -360,12 +326,6 @@
                 <div class="label">números</div>
                 <div class="price">R$ 50,00</div>
             </div>
-        </div>
-
-        <div class="manual-control">
-            <button class="control-btn" onclick="adjustQuantity(-50)"><i class="fa-solid fa-minus"></i></button>
-            <input type="number" id="manualQuantity" class="manual-input" value="100" oninput="updateFromInput()">
-            <button class="control-btn" onclick="adjustQuantity(50)"><i class="fa-solid fa-plus"></i></button>
         </div>
 
         <a href="#" target="_blank" class="whatsapp-float" id="whatsappFloat"><i class="fa-brands fa-whatsapp"></i></a>
@@ -409,34 +369,38 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary w-100 fw-bold py-2" onclick="proceedToPayment()">Avançar para o Pagamento Pix</button>
+                        <button type="button" class="btn btn-primary w-100 fw-bold py-2" onclick="proceedToPayment()">Gerar Pix e QR Code</button>
                     </div>
                 </div>
 
-                <!-- PASSO 2: PAGAMENTO E CHAVE PIX ESTÁTICA -->
+                <!-- PASSO 2: PAGAMENTO COM O PIX PRE-CONFIGURADO -->
                 <div id="stepPixPayment" style="display: none;">
                     <div class="modal-header">
-                        <h5 class="modal-title fw-bold text-success"><i class="fa-solid fa-qrcode"></i> Pagamento via Pix</h5>
+                        <h5 class="modal-title fw-bold text-success"><i class="fa-solid fa-qrcode"></i> Pague via Pix</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text-center">
-                        <p class="small text-muted mb-2">Realize o Pix no valor exato abaixo para a chave do Daniel:</p>
+                        <p class="small text-muted mb-2">Escaneie o QR Code abaixo ou copie o Pix Copia e Cola com o valor exato:</p>
                         
-                        <div class="alert alert-info py-2 mb-3">
-                            <span class="d-block small text-muted">Valor Exato da Compra:</span>
-                            <strong id="displayTotalPixValue" class="fs-4 text-info">R$ 10,00</strong>
+                        <!-- QR Code visual -->
+                        <div class="bg-white p-2 d-inline-block rounded mb-3 shadow">
+                            <img id="qrCodeImageTag" src="" alt="QR Code Pix" style="width: 150px; height: 150px;">
                         </div>
 
                         <div class="mb-3 text-start">
-                            <label class="form-label small text-muted fw-semibold">Chave Pix (Telefone):</label>
+                            <label class="form-label small text-muted fw-semibold">Pix Copia e Cola:</label>
                             <div class="input-group">
-                                <input type="text" id="pixKeyText" class="form-control font-monospace text-center bg-dark text-warning fw-bold" value="37988357265" readonly>
+                                <input type="text" id="pixKeyText" class="form-control font-monospace small text-center bg-dark text-warning fw-bold" readonly>
                                 <button class="btn btn-warning fw-bold text-dark px-3" type="button" onclick="copyPixKey()"><i class="fa-regular fa-copy me-1"></i> Copiar</button>
                             </div>
                         </div>
 
+                        <div class="alert alert-info small text-start py-2 border-info">
+                            <strong>Valor da Compra:</strong> <span id="displayTotalPixValue" class="fw-bold text-info">R$ 10,00</span>
+                        </div>
+
                         <div class="alert alert-success small text-start border-success mb-3">
-                            <i class="fa-solid fa-circle-check me-1"></i> Seus números já foram gerados e salvos no sistema! O comprovante em PDF foi baixado automaticamente no seu dispositivo.
+                            <i class="fa-solid fa-circle-check me-1"></i> Seus números foram gerados e o PDF foi baixado automaticamente!
                         </div>
 
                         <div class="d-grid gap-2">
@@ -479,17 +443,22 @@
             console.warn("Firebase rodando em modo offline/aguardando configuração.");
         }
 
-        const pricePerNumber = 0.10;
         let currentQuantity = 100;
+        let currentTotalValue = 10.00;
         let checkoutModalInstance;
         let generatedNumbersList = [];
 
         const WHATSAPP_DANIEL = "5537991923068";
-        const CHAVE_PIX_DANIEL = "37988357265";
+
+        // Payloads Pix exatos para cada valor fixo
+        const PIX_PAYLOADS = {
+            10.00: "00020126450014BR.GOV.BCB.PIX0116+5555379979290680203***520400005303986540510.005802BR5901N6001C62050501n6304CF41",
+            25.00: "00020126450014BR.GOV.BCB.PIX0116+5555379979290680203***520400005303986540525.005802BR5901N6001C62050501n6304E1E1",
+            50.00: "00020126450014BR.GOV.BCB.PIX0116+5555379979290680203***520400005303986540550.005802BR5901N6001C62050501n63049F97"
+        };
 
         document.getElementById('whatsappFloat').href = `https://wa.me/${WHATSAPP_DANIEL}?text=Olá%20Daniel,%20estou%20com%20dúvidas%20na%20rifa!`;
 
-        const manualInput = document.getElementById('manualQuantity');
         const participateBtn = document.getElementById('participateBtn');
         const cards = document.querySelectorAll('.number-option-card');
 
@@ -501,34 +470,18 @@
             chevron.classList.toggle('fa-chevron-up');
         }
 
-        function updateUI(qty) {
-            currentQuantity = qty > 0 ? qty : 1;
-            manualInput.value = currentQuantity;
-            const totalPrice = (currentQuantity * pricePerNumber).toFixed(2).replace('.', ',');
-            participateBtn.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> Participar | R$ ${totalPrice}`;
-            
-            document.getElementById('modalSummaryQty').innerText = currentQuantity;
-            document.getElementById('modalSummaryPrice').innerText = `R$ ${totalPrice}`;
-        }
-
         function selectPackage(qty, price, element) {
             cards.forEach(c => c.classList.remove('active'));
             element.classList.add('active');
-            updateUI(qty);
-        }
+            
+            currentQuantity = qty;
+            currentTotalValue = price;
 
-        function adjustQuantity(amount) {
-            let newQty = currentQuantity + amount;
-            if (newQty < 1) newQty = 1;
-            cards.forEach(c => c.classList.remove('active'));
-            updateUI(newQty);
-        }
-
-        function updateFromInput() {
-            let val = parseInt(manualInput.value);
-            if (isNaN(val) || val < 1) val = 1;
-            cards.forEach(c => c.classList.remove('active'));
-            updateUI(val);
+            const priceStr = price.toFixed(2).replace('.', ',');
+            participateBtn.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> Participar | R$ ${priceStr}`;
+            
+            document.getElementById('modalSummaryQty').innerText = currentQuantity;
+            document.getElementById('modalSummaryPrice').innerText = `R$ ${priceStr}`;
         }
 
         function openCheckoutModal() {
@@ -549,8 +502,14 @@
                 return;
             }
 
-            const totalPrice = (currentQuantity * pricePerNumber).toFixed(2);
-            document.getElementById('displayTotalPixValue').innerText = `R$ ${totalPrice.replace('.', ',')}`;
+            const totalPriceStr = currentTotalValue.toFixed(2);
+            document.getElementById('displayTotalPixValue').innerText = `R$ ${totalPriceStr.replace('.', ',')}`;
+
+            // Seleciona o payload Pix correspondente ao valor fixo escolhido
+            const payloadPix = PIX_PAYLOADS[currentTotalValue] || PIX_PAYLOADS[10.00];
+            
+            document.getElementById('pixKeyText').value = payloadPix;
+            document.getElementById('qrCodeImageTag').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(payloadPix)}`;
 
             // Gera os números da sorte instantaneamente
             generatedNumbersList = [];
@@ -570,20 +529,20 @@
                     whatsapp: phone,
                     quantidadeNumeros: currentQuantity,
                     numerosSorte: generatedNumbersList,
-                    valorTotal: parseFloat(totalPrice),
+                    valorTotal: currentTotalValue,
                     dataCadastro: new Date().toISOString(),
                     metadados: { dispositivo: dispositivo, navegador: navigator.userAgent }
                 }).catch(err => console.log("Aviso do banco:", err));
             }
 
             // Prepara o link do WhatsApp com mensagem pronta
-            const msgZap = `Olá Daniel! Segue meu comprovante do Pix de R$ ${totalPrice.replace('.', ',')} da rifa de R$ 1.000,00.\n\nNome: ${name}\nCPF: ${cpfUser}\nQtd Bilhetes: ${currentQuantity}\n\nMeus primeiros números: ${generatedNumbersList.slice(0, 5).join(', ')}... (comprovante em PDF gerado)`;
+            const msgZap = `Olá Daniel! Segue meu comprovante do Pix de R$ ${totalPriceStr.replace('.', ',')} da rifa de R$ 1.000,00.\n\nNome: ${name}\nCPF: ${cpfUser}\nQtd Bilhetes: ${currentQuantity}\n\nMeus primeiros números: ${generatedNumbersList.slice(0, 5).join(', ')}... (comprovante em PDF gerado)`;
             document.getElementById('whatsappSendBtn').href = `https://wa.me/${WHATSAPP_DANIEL}?text=${encodeURIComponent(msgZap)}`;
 
             // Baixa o PDF automaticamente
             downloadPDFReceipt();
 
-            // Alterna para a tela de pagamento e chave Pix
+            // Alterna para a tela do Pix e QR Code
             document.getElementById('stepIdentification').style.display = 'none';
             document.getElementById('stepPixPayment').style.display = 'block';
         }
@@ -593,7 +552,7 @@
             pixInput.select();
             pixInput.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(pixInput.value);
-            alert('Chave Pix copiada com sucesso!');
+            alert('Pix Copia e Cola copiado com sucesso!');
         }
 
         function downloadPDFReceipt() {
@@ -603,7 +562,7 @@
             const name = document.getElementById('userName').value;
             const cpfUser = document.getElementById('userCpf').value;
             const phone = document.getElementById('userPhone').value;
-            const totalPrice = (currentQuantity * pricePerNumber).toFixed(2);
+            const totalPrice = currentTotalValue.toFixed(2);
 
             doc.setFillColor(13, 19, 34);
             doc.rect(0, 0, 210, 297, 'F');
